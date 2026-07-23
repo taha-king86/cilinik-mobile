@@ -1,0 +1,530 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="resources/lo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>درباره ما - کلینیک موبایل</title>
+    <meta name="description" content="درباره کلینیک موبایل - تجربه چندساله در تعمیرات تخصصی موبایل، فروش گوشی و لوازم جانبی در یزد">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'vazir': ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#000000',
+                        'secondary': '#FFFFFF',
+                        'accent': '#333333',
+                        'light-gray': '#F5F5F5',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #000000;
+            color: #FFFFFF;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .hero-bg::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('resources/repair-tools.jpg') center/cover;
+            opacity: 0.3;
+            z-index: 1;
+        }
+        
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+        
+        .team-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .team-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .stat-card:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: scale(1.05);
+        }
+        
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.sticky {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu.active {
+            transform: translateX(0);
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: #FFFFFF;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #F5F5F5;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .gallery-item {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .gallery-item:hover {
+            transform: scale(1.05);
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="resources/lo.png" alt="کلینیک موبایل" class="w-12 h-12" style="border-radius: 10px; margin-left: 10px;">
+
+                <span class="text-xl font-bold text-white">کلینیک موبایل</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-gray-300 transition-colors" style="margin-left: 30px;">صفحه اصلی</a>
+                <a href="services.html" class="text-white hover:text-gray-300 transition-colors">خدمات تعمیرات</a>
+                <a href="phones.html" class="text-white hover:text-gray-300 transition-colors">نمایش گوشی‌ها</a>
+                <a href="about.html" class="text-white hover:text-gray-300 transition-colors font-semibold">درباره ما</a>
+                <a href="contact.html" class="text-white hover:text-gray-300 transition-colors">تماس با ما</a>
+            </div>
+            
+            <button class="nav-toggle md:hidden text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="nav-menu md:hidden">
+            <div class="flex flex-col items-center space-y-6 mt-8">
+                <a href="index.html" class="text-white hover:text-gray-300 transition-colors text-lg">صفحه اصلی</a>
+                <a href="services.html" class="text-white hover:text-gray-300 transition-colors text-lg">خدمات تعمیرات</a>
+                <a href="phones.html" class="text-white hover:text-gray-300 transition-colors text-lg">نمایش گوشی‌ها</a>
+                <a href="about.html" class="text-white hover:text-gray-300 transition-colors text-lg font-semibold">درباره ما</a>
+                <a href="contact.html" class="text-white hover:text-gray-300 transition-colors text-lg">تماس با ما</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-96 flex items-center justify-center pt-20">
+        <div class="hero-content max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+                درباره کلینیک موبایل
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto">
+                تجربه چندساله ما در خدمات تخصصی موبایل، تضمین کیفیت و رضایت شماست
+            </p>
+        </div>
+    </section>
+
+    <!-- Company Story -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="animate-on-scroll">
+                    <h2 class="text-4xl font-bold mb-6 text-white">داستان ما</h2>
+                    <div class="space-y-6 text-gray-300 leading-relaxed">
+                        <p class="text-lg">
+                            کلینیک موبایل با تجربه‌ی چندساله در زمینه تعمیر انواع گوشی، فروش گوشی‌های نو و کارکرده و ارائه لوازم جانبی فعالیت می‌کند. ما در محیطی حرفه‌ای و با ابزارهای پیشرفته تعمیرات دقیق و سریع ارائه می‌دهیم.
+                        </p>
+                        <p>
+                            از روز اول، هدف ما ارائه خدمات با کیفیت بالا و قیمت منصفانه بوده است. تیم ما متشکل از متخصصان مجرب و آموزش‌دیده است که به روزترین تکنیک‌ها و فناوری‌های تعمیرات موبایل را فرا گرفته‌اند.
+                        </p>
+                        <p>
+                            ما به مشتریان خود اطمینان می‌دهیم که گوشی‌هایشان با بهترین قطعات و دقیق‌ترین روش‌ها تعمیر می‌شوند. کیفیت کار ما تضمین شده است و این نشان از اعتماد ما به تخصص و تجربه‌مان دارد.
+                        </p>
+                    </div>
+                    
+                    <div class="mt-8">
+                        <button onclick="navigateToPage('contact.html')" class="btn-primary px-8 py-3 rounded-lg font-semibold">
+                            تماس با ما
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="animate-on-scroll">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="gallery-item p-4 rounded-lg text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-2">تعمیرات تخصصی</h3>
+                            <p class="text-gray-300 text-sm">با بهترین تجهیزات</p>
+                        </div>
+                        
+                        <div class="gallery-item p-4 rounded-lg text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                </svg>
+                            </div>
+                             <h3 class="text-lg font-semibold text-white mb-2">ضمانت معتبر </h3>
+                            <p class="text-gray-300 text-sm">بهترین کیفیت</p>
+                        </div>
+                        
+                        <div class="gallery-item p-4 rounded-lg text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-2">قیمت منصفانه</h3>
+                            <p class="text-gray-300 text-sm">خریدی مطمئن</p>
+                        </div>
+                        
+                        <div class="gallery-item p-4 rounded-lg text-center">
+                            <div class="w-16 h-16 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                                <svg class="w-8 h-8 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path>
+                                </svg>
+                            </div>
+                            <h3 class="text-lg font-semibold text-white mb-2">تحویل سریع</h3>
+                            <p class="text-gray-300 text-sm">در زمان معلوم</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Statistics -->
+    <section class="py-20 bg-gray-900 animate-on-scroll">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">آمار و دستاوردها</h2>
+                <p class="text-xl text-gray-300">نتایج تلاش و تعهد ما به کیفیت</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="stat-card p-8 rounded-lg text-center">
+                    <div class="text-4xl font-bold text-white mb-2" id="repairs-count">0</div>
+                    <div class="text-gray-300">تعمیر موفق</div>
+                </div>
+                
+                <div class="stat-card p-8 rounded-lg text-center">
+                    <div class="text-4xl font-bold text-white mb-2" id="customers-count">0</div>
+                    <div class="text-gray-300">مشتری راضی</div>
+                </div>
+                
+                <div class="stat-card p-8 rounded-lg text-center">
+                    <div class="text-4xl font-bold text-white mb-2" id="years-count">0</div>
+                    <div class="text-gray-300">سال تجربه</div>
+                </div>
+                <div class="stat-card p-8 rounded-lg text-center">
+                    <div class="text-4xl font-bold text-white mb-2" id="set-count">0</div>
+                    <div class="text-gray-300">نمره⭐</div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section class="py-20 animate-on-scroll">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">تیم متخصص ما</h2>
+                <p class="text-xl text-gray-300">متخصصان مجرب و آموزش‌دیده</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="team-card p-6 rounded-lg text-center">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-black">و ب</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">وحید بهره ور</h3>
+                    <p class="text-gray-300 mb-4">مدیر فنی و متخصص تعمیرات</p>
+                    <div class="text-sm text-gray-400">
+                        <p>• بیش از ۸ سال تجربه در تعمیرات</p>
+                        <p>• تخصص در تعمیرات برد و IC</p>
+                        <p>• مدرک بین‌المللی تعمیرات موبایل</p>
+                    </div>
+                </div>
+                
+                <div class="team-card p-6 rounded-lg text-center">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-black">ا ر</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">ابوالفضل روح</h3>
+                    <p class="text-gray-300 mb-4">متخصص تعمیرات نرم‌افزاری</p>
+                    <div class="text-sm text-gray-400">
+                        <p>• متخصص بازیابی اطلاعات</p>
+                        <p>• تخصص در رفع مشکلات نرم‌افزاری</p>
+                        <p>• تجربه در تعمیرات سخت‌افزاری</p>
+                    </div>
+                </div>
+                
+                <div class="team-card p-6 rounded-lg text-center">
+                    <div class="w-24 h-24 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-2xl font-bold text-black">م ط</span>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">محمد طاها</h3>
+                    <p class="text-gray-300 mb-4">کارشناس فروش و مشاور</p>
+                    <div class="text-sm text-gray-400">
+                        <p>• مشاور تخصصی خرید گوشی</p>
+                        <p>• کارشناس لوازم جانبی</p>
+                        <p>• پشتیبانی فنی مشتریان</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workshop Gallery -->
+    <section class="py-20 bg-gray-900 animate-on-scroll">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">گالری کارگاه</h2>
+                <p class="text-xl text-gray-300">محیط حرفه‌ای و تجهیزات پیشرفته</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/i.pinimg.com/c63db9602c0098ef18a10ae0b7becfeabb5277ad.jpg" 
+                         alt="کارگاه تعمیرات" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">کارگاه اصلی</h3>
+                    <p class="text-gray-300 text-sm">محیط تمیز و حرفه‌ای برای تعمیرات دقیق</p>
+                </div>
+                
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/epcusa.com/8c7fc3292ebd5d8c74387ab211b30346d5a4fbe4.jpg" 
+                         alt="تجهیزات تعمیرات" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">تجهیزات پیشرفته</h3>
+                    <p class="text-gray-300 text-sm">ابزارهای تخصصی برای تعمیرات با کیفیت</p>
+                </div>
+                
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.diyfixtool.com/c154e0f5b81abd6fdefaf4985f2dcd008764a240.png" 
+                         alt="ایستگاه کاری" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">ایستگاه‌های کاری</h3>
+                    <p class="text-gray-300 text-sm">هر ایستگاه مجهز به ابزارهای تخصصی</p>
+                </div>
+                
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/st2.depositphotos.com/97be79ca7558e8d45283fcea04848a2914545e46.jpg" 
+                         alt="ابزار دقیق" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">ابزار دقیق</h3>
+                    <p class="text-gray-300 text-sm">ابزارهای پیشرفته برای تعمیرات ظریف</p>
+                </div>
+                
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/s.alicdn.com/efa6bbee24ebde313f74b053da283b10048f6ac8.png" 
+                         alt="محیط کاری" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">محیط کاری</h3>
+                    <p class="text-gray-300 text-sm">فضای منظم و حرفه‌ای</p>
+                </div>
+                
+                <div class="gallery-item p-4 rounded-lg">
+                    <img src="https://kimi-web-img.moonshot.cn/img/www.diyfixtool.com/8bb9963d0a3c76b27a6d0c9dd1e9a71870f3570b.png" 
+                         alt="تست نهایی" class="w-full h-48 object-cover rounded-lg mb-4">
+                    <h3 class="text-lg font-semibold text-white mb-2">تست نهایی</h3>
+                    <p class="text-gray-300 text-sm">بررسی کامل قبل از تحویل به مشتری</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Credentials -->
+    <section class="py-20 animate-on-scroll">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-bold mb-4 text-white">اعتبار و افتخارات</h2>
+                <p class="text-xl text-gray-300">گواهینامه‌ها و دستاوردهای ما</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4M7.835 4.697a3.42 3.42 0 001.946-.806 3.42 3.42 0 014.438 0 3.42 3.42 0 001.946.806 3.42 3.42 0 013.138 3.138 3.42 3.42 0 00.806 1.946 3.42 3.42 0 010 4.438 3.42 3.42 0 00-.806 1.946 3.42 3.42 0 01-3.138 3.138 3.42 3.42 0 00-1.946.806 3.42 3.42 0 01-4.438 0 3.42 3.42 0 00-1.946-.806 3.42 3.42 0 01-3.138-3.138 3.42 3.42 0 00-.806-1.946 3.42 3.42 0 010-4.438 3.42 3.42 0 00.806-1.946 3.42 3.42 0 013.138-3.138z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">گواهینامه بین‌المللی</h3>
+                    <p class="text-gray-300">تاییدیه بین‌المللی تعمیرات موبایل از اتحادیه اروپا</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">برترین تعمیرگاه</h3>
+                    <p class="text-gray-300">انتخاب بهترین مرکز تعمیرات موبایل در یزد</p>
+                </div>
+                
+                <div class="text-center p-6">
+                    <div class="w-20 h-20 mx-auto mb-4 bg-white rounded-full flex items-center justify-center">
+                        <svg class="w-10 h-10 text-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-semibold text-white mb-2">رضایت مشتری</h3>
+                    <p class="text-gray-300">بالاترین نمره رضایت مشتری در استان</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center mb-6">
+                <img src="resources/lo.png" alt="کلینیک موبایل" class="w-12 h-12" style="border-radius: 10px; margin-left: 10px;">
+
+                <span class="text-2xl font-bold text-white">کلینیک موبایل</span>
+            </div>
+            <p class="text-gray-400 mb-6">یزد، بلوار کارگر، خیابان سجاد شمالی، نبش کوچه ۱۶</p>
+            <div class="flex justify-center space-x-6 mb-6">
+                <button onclick="contactInstagram()" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-gray-500 text-sm">
+                © 2024 کلینیک موبایل. تمامی حقوق محفوظ است.
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Animate statistics counters
+        function animateCounters() {
+            const counters = [
+                { id: 'repairs-count', target: 2500, duration: 2000 },
+                { id: 'customers-count', target: 1800, duration: 2000 },
+                { id: 'years-count', target: 9, duration: 2000 },
+                { id: 'set-count', target: 5, duration: 1000 }
+
+            ];
+            
+            counters.forEach(counter => {
+                const element = document.getElementById(counter.id);
+                const increment = counter.target / (counter.duration / 16);
+                let current = 0;
+                
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= counter.target) {
+                        current = counter.target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current).toLocaleString();
+                }, 16);
+            });
+        }
+        
+        // Trigger counter animation when section is visible
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateCounters();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+        
+        observer.observe(document.querySelector('.stat-card').parentElement);
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
