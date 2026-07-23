@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="resources/lo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نمایش گوشی‌ها - کلینیک موبایل</title>
+    <meta name="description" content="مشاهده و بررسی گوشی‌های نو و کارکرده موجود در کلینیک موبایل. برای خرید تماس بگیرید: 09130976133">
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Core Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'vazir': ['Vazirmatn', 'sans-serif'],
+                    },
+                    colors: {
+                        'primary': '#000000',
+                        'secondary': '#FFFFFF',
+                        'accent': '#333333',
+                        'light-gray': '#F5F5F5',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            background: #000000;
+            color: #FFFFFF;
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #000000 0%, #333333 100%);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .phone-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+        
+        .phone-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 15px 30px rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.08);
+        }
+        
+        .filter-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .filter-btn.active,
+        .filter-btn:hover {
+            background: #FFFFFF;
+            color: #000000;
+        }
+        
+        .navbar {
+            transition: all 0.3s ease;
+        }
+        
+        .navbar.sticky {
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(20px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        }
+        
+        .nav-menu {
+            transition: all 0.3s ease;
+        }
+        
+        .nav-menu.active {
+            transform: translateX(0);
+        }
+        
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+        
+        .animate-on-scroll.animate-in {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .btn-primary {
+            background: #FFFFFF;
+            color: #000000;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary:hover {
+            background: #F5F5F5;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .btn-secondary {
+            background: transparent;
+            color: #FFFFFF;
+            border: 2px solid #FFFFFF;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-secondary:hover {
+            background: #FFFFFF;
+            color: #000000;
+            transform: translateY(-2px);
+        }
+        
+        .search-input {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: #FFFFFF;
+            outline: none;
+        }
+        
+        .phone-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            opacity: 0;
+            transition: all 0.3s ease;
+        }
+        
+        .phone-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+        
+        .modal-content {
+            background: #000000;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+        }
+        
+        .phone-modal.active .modal-content {
+            transform: scale(1);
+        }
+        
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: fixed;
+                top: 70px;
+                right: -100%;
+                width: 100%;
+                height: calc(100vh - 70px);
+                background: rgba(0, 0, 0, 0.95);
+                backdrop-filter: blur(20px);
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: center;
+                padding-top: 2rem;
+            }
+            
+            .nav-menu.active {
+                right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar fixed top-0 left-0 right-0 z-50 px-6 py-4">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-4">
+                <img src="resources/lo.png" alt="کلینیک موبایل" class="w-12 h-12" style="border-radius: 10px; margin-left: 10px;">
+
+                <span class="text-xl font-bold text-white">کلینیک موبایل</span>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="index.html" class="text-white hover:text-gray-300 transition-colors" style="margin-left:30px;">صفحه اصلی</a>
+                <a href="services.html" class="text-white hover:text-gray-300 transition-colors">خدمات تعمیرات</a>
+                <a href="phones.html" class="text-white hover:text-gray-300 transition-colors font-semibold">نمایش گوشی‌ها</a>
+                <a href="about.html" class="text-white hover:text-gray-300 transition-colors">درباره ما</a>
+                <a href="contact.html" class="text-white hover:text-gray-300 transition-colors">تماس با ما</a>
+            </div>
+            
+            <button class="nav-toggle md:hidden text-white">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div class="nav-menu md:hidden">
+            <div class="flex flex-col items-center space-y-6 mt-8">
+                <a href="index.html" class="text-white hover:text-gray-300 transition-colors text-lg">صفحه اصلی</a>
+                <a href="services.html" class="text-white hover:text-gray-300 transition-colors text-lg">خدمات تعمیرات</a>
+                <a href="phones.html" class="text-white hover:text-gray-300 transition-colors text-lg font-semibold">نمایش گوشی‌ها</a>
+                <a href="about.html" class="text-white hover:text-gray-300 transition-colors text-lg">درباره ما</a>
+                <a href="contact.html" class="text-white hover:text-gray-300 transition-colors text-lg">تماس با ما</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-bg min-h-96 flex items-center justify-center pt-20">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 text-white">
+                گوشی‌های نو و کارکرده
+            </h1>
+            <p class="text-xl md:text-2xl text-gray-200 max-w-3xl mx-auto mb-8">
+                برای خرید گوشی، لطفاً تماس بگیرید: ۰۹۱۳۰۹۷۶۱۳۳
+            </p>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <button onclick="callForPurchase()" class="btn-primary px-8 py-4 rounded-lg font-semibold text-lg flex items-center">
+                    <svg class="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z"></path>
+                    </svg>
+                    تماس برای خرید
+                </button>
+                <a href="#phones" class="btn-secondary px-8 py-4 rounded-lg font-semibold text-lg">
+                    مشاهده گوشی‌ها
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filters -->
+    <section id="phones" class="py-12">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="flex flex-col lg:flex-row gap-6 items-center justify-between mb-12">
+                <!-- Brand Filters -->
+                <div class="flex flex-wrap gap-3">
+                    <button class="filter-btn active px-4 py-2 rounded-lg text-sm font-medium" data-filter="all">
+                        همه برندها
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium" data-filter="apple">
+                        اپل
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium" data-filter="samsung">
+                        سامسونگ
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium" data-filter="xiaomi">
+                        شیائومی
+                    </button>
+                    <button class="filter-btn px-4 py-2 rounded-lg text-sm font-medium" data-filter="huawei">
+                        هواوی
+                    </button>
+                </div>
+                
+                <!-- Search -->
+                <div class="flex items-center space-x-4">
+                    <input type="text" placeholder="جستجوی مدل گوشی..." 
+                           class="phone-search search-input px-4 py-2 rounded-lg text-white w-64">
+                    <div class="text-gray-400 text-sm">
+                        <span id="phone-count">۱۵</span> گوشی موجود
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Phone Gallery -->
+    <section class="pb-20">
+        <h1 style="text-align: center; margin-bottom: 50px;font-size: 20px;">برای موجود شدن گوشی مورد نظر خودتان ، لطفا تماس بگیرید<span style="color: red;">!</span></h1>
+
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="phone-grid">
+                
+                <!-- iPhone 15 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="resources/assets/ip17promax.png" 
+                         alt="iPhone 15 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphone15pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone 17 Pro max</h3>
+                        <p class="text-gray-300 mb-1">256-512GB</p> 
+                        <p class="text-gray-300 mb-1">12GB ram</p> 
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۶۵,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Samsung Galaxy S24 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="samsung">
+                    <img src="resources/assets/s25ultra.png" 
+                         alt="Samsung Galaxy S24" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('galaxys24')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Samsung Galaxy S25</h3>
+                        <p class="text-gray-300 mb-1">512-256GB</p>
+                        <p class="text-gray-300 mb-1">12GB ram</p> 
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۵۸,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Xiaomi 14 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="xiaomi">
+                    <img src="resources/assets/14xi.png" 
+                         alt="Xiaomi 14 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('xiaomi14pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Xiaomi 14 Pro</h3>
+                        <p class="text-gray-300 mb-1">512-256GB</p>
+                        <p class="text-gray-300 mb-1">12-8GB ram</p> 
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۴۲,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- iPhone 13 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="https://kimi-web-img.moonshot.cn/img/pisces.bbystatic.com/d5a71910f8cbaeecaced7e73287f13c73fae06a7.jpg" 
+                         alt="iPhone 13 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphone13pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone 13 Pro</h3>
+                        <p class="text-gray-300 mb-1">256-512GB</p>
+                        <p class="text-gray-300 mb-1">8GB ram</p> 
+
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۴۸,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- iPhone 12 Pro Max -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="https://kimi-web-img.moonshot.cn/img/2f.zol-img.com.cn/a93cf446a9e477718fdbbe039709a96f0ffc63b9.png" 
+                         alt="iPhone 12 Pro Max" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphone12promax')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone 12 Pro Max</h3>
+                        <p class="text-gray-300 mb-1">256GB - طلایی</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۳۸,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Samsung Galaxy A54 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="samsung">
+                    <img src="https://kimi-web-img.moonshot.cn/img/static0.xdaimages.com/260e6962c41167cc05d7ab04f97eedede500ba4b.png" 
+                         alt="Samsung Galaxy A54" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('galaxya54')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Samsung Galaxy A54</h3>
+                        <p class="text-gray-300 mb-1">128GB - سفید</p>
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۱۸,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Xiaomi 13 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="xiaomi">
+                    <img src="https://kimi-web-img.moonshot.cn/img/ugc-img.ifengimg.com/3bc8d18a23d9546aaafcd9554c4a50cad13a22ff.jpeg" 
+                         alt="Xiaomi 13" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('xiaomi13')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Xiaomi 13</h3>
+                        <p class="text-gray-300 mb-1">256GB - مشکی</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۲۸,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- iPhone SE 2022 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="https://kimi-web-img.moonshot.cn/img/pisces.bbystatic.com/d5a71910f8cbaeecaced7e73287f13c73fae06a7.jpg" 
+                         alt="iPhone SE 2022" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphonese2022')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone SE 2022</h3>
+                        <p class="text-gray-300 mb-1">128GB - سفید</p>
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۲۲,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Huawei P60 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="huawei">
+                    <img src="https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/318e53e902adb26592a7f5ee3c21c4487e5aa8f3.jpg" 
+                         alt="Huawei P60 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('huaweip60pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Huawei P60 Pro</h3>
+                        <p class="text-gray-300 mb-1">256GB - مشکی</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۳۲,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- OnePlus 11 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="xiaomi">
+                    <img src="https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/292217cdb4882d1d3101ce5f5ed61ef1f7949e29.jpg" 
+                         alt="OnePlus 11 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('oneplus11pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">OnePlus 11 Pro</h3>
+                        <p class="text-gray-300 mb-1">512GB - سبز</p>
+                        <p class="text-gray-300 mb-3">وضعیت: نو</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۳۵,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- iPhone 11 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="https://kimi-web-img.moonshot.cn/img/pisces.bbystatic.com/d5a71910f8cbaeecaced7e73287f13c73fae06a7.jpg" 
+                         alt="iPhone 11 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphone11pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone 11 Pro</h3>
+                        <p class="text-gray-300 mb-1">64GB - نقره‌ای</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۲۵,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Samsung Galaxy S23 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="samsung">
+                    <img src="https://kimi-web-img.moonshot.cn/img/sm.pcmag.com/c73d62a2cfb1113f1efa9085dcba5591dc0461d7.jpg" 
+                         alt="Samsung Galaxy S23" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('galaxys23')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Samsung Galaxy S23</h3>
+                        <p class="text-gray-300 mb-1">256GB - مشکی</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۳۰,۰۰۰,۰۰۰ تومان</p> -->
+                        <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Google Pixel 7 Pro -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="xiaomi">
+                    <img src="https://kimi-web-img.moonshot.cn/img/bkimg.cdn.bcebos.com/4ba008c10f8ae1aa1c681c633c012f81b7dfa2d5" 
+                         alt="Google Pixel 7 Pro" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('pixel7pro')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Google Pixel 7 Pro</h3>
+                        <p class="text-gray-300 mb-1">128GB - مشکی</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۲۶,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Samsung Galaxy S22 -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="samsung">
+                    <img src="https://kimi-web-img.moonshot.cn/img/image.c114.com.cn/6499af65a4c5b4f4e871b54c4db10af7aafa7a99.jpg" 
+                         alt="Samsung Galaxy S22" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('galaxys22')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">Samsung Galaxy S22</h3>
+                        <p class="text-gray-300 mb-1">128GB - سفید</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۲۴,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+                <!-- iPhone 14 Pro Max -->
+                <div class="phone-card p-6 rounded-lg animate-on-scroll" data-brand="apple">
+                    <img src="https://kimi-web-img.moonshot.cn/img/buy.gazelle.com/cb60b9faadc7fdd555c763b30adfac7e40d04089.jpg" 
+                         alt="iPhone 14 Pro Max" class="w-full h-48 object-contain mb-4 rounded cursor-pointer" 
+                         onclick="openPhoneModal('iphone14promax')">
+                    <div class="text-center">
+                        <h3 class="phone-model text-xl font-semibold mb-2 text-white">iPhone 14 Pro Max</h3>
+                        <p class="text-gray-300 mb-1">256GB - بنفش</p>
+                        <p class="text-gray-300 mb-3">وضعیت: کارکرده</p>
+                        <!-- <p class="text-2xl font-bold text-white mb-4">۵۵,۰۰۰,۰۰۰ تومان</p> -->
+                         <br>
+                        <button onclick="callForPurchase()" class="btn-primary w-full py-2 rounded-lg font-semibold">
+                            تماس برای خرید
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-gray-800">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <div class="flex items-center justify-center mb-6">
+                <img src="resources/lo.png" alt="کلینیک موبایل" class="w-12 h-12" style="border-radius: 10px; margin-left: 10px;">
+
+                <span class="text-2xl font-bold text-white">کلینیک موبایل</span>
+            </div>
+            <p class="text-gray-400 mb-6">یزد، بلوار کارگر، خیابان سجاد شمالی، نبش کوچه ۱۶</p>
+            <div class="flex justify-center space-x-6 mb-6">
+                <button onclick="contactInstagram()" class="text-gray-400 hover:text-white transition-colors">
+                    <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                    </svg>
+                </button>
+            </div>
+            <p class="text-gray-500 text-sm">
+                © 2024 کلینیک موبایل. تمامی حقوق محفوظ است.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Phone Detail Modal -->
+    <div id="phone-modal" class="phone-modal">
+        <div class="modal-content p-8 m-auto">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="text-2xl font-bold text-white" id="modal-title">جزئیات گوشی</h3>
+                <button class="modal-close text-gray-400 hover:text-white" onclick="closePhoneModal()">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+                    </svg>
+                </button>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                    <img id="modal-image" src="" alt="" class="w-full h-64 object-contain rounded-lg mb-4">
+                </div>
+                
+                <div>
+                    <div class="space-y-4">
+                        <div>
+                            <h4 class="text-lg font-semibold text-white mb-2">مشخصات فنی</h4>
+                            <div id="modal-specs" class="space-y-2 text-gray-300">
+                                <!-- Specs will be loaded here -->
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <h4 class="text-lg font-semibold text-white mb-2">قیمت</h4>
+                            <p id="modal-price" class="text-2xl font-bold text-white"></p>
+                        </div>
+                        
+                        <div class="pt-4">
+                            <button onclick="callForPurchase()" class="btn-primary w-full py-3 rounded-lg font-semibold text-lg">
+                                تماس برای خرید: ۰۹۱۳۰۹۷۶۱۳۳
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Phone data for modal
+        const phoneData = {
+            iphone15pro: {
+                title: 'iPhone 15 Pro',
+                image: 'https://kimi-web-img.moonshot.cn/img/m.media-amazon.com/965ba574e69e0f47690f93d04fb0c8e650baa69d.jpg',
+                price: '۶۵,۰۰۰,۰۰۰ تومان',
+                specs: [
+                    'صفحه‌نمایش: 6.1 اینچ Super Retina XDR',
+                    'پردازنده: A17 Pro',
+                    'حافظه: 256GB',
+                    'رم: 8GB',
+                    'دوربین: سه‌گانه 48MP + 12MP + 12MP',
+                    'باتری: 3274 mAh',
+                    'سیستم‌عامل: iOS 17'
+                ]
+            },
+            galaxys24: {
+                title: 'Samsung Galaxy S24',
+                image: 'https://kimi-web-img.moonshot.cn/img/static0.pocketlintimages.com/25b6f8670e70f94a3808cc6364f3cc296085b204.jpg',
+                price: '۵۸,۰۰۰,۰۰۰ تومان',
+                specs: [
+                    'صفحه‌نمایش: 6.2 اینچ Dynamic AMOLED 2X',
+                    'پردازنده: Snapdragon 8 Gen 3',
+                    'حافظه: 256GB',
+                    'رم: 8GB',
+                    'دوربین: سه‌گانه 50MP + 12MP + 10MP',
+                    'باتری: 4000 mAh',
+                    'سیستم‌عامل: Android 14'
+                ]
+            },
+            xiaomi14pro: {
+                title: 'Xiaomi 14 Pro',
+                image: 'https://kimi-web-img.moonshot.cn/img/puui.qpic.cn/71f8ccc164dd18e61fe4c1c9706d66f9f6595e36',
+                price: '۴۲,۰۰۰,۰۰۰ تومان',
+                specs: [
+                    'صفحه‌نمایش: 6.73 اینچ LTPO AMOLED',
+                    'پردازنده: Snapdragon 8 Gen 3',
+                    'حافظه: 512GB',
+                    'رم: 12GB',
+                    'دوربین: سه‌گانه 50MP + 50MP + 50MP',
+                    'باتری: 4880 mAh',
+                    'سیستم‌عامل: Android 14'
+                ]
+            }
+        };
+
+        function openPhoneModal(phoneId) {
+            const phone = phoneData[phoneId];
+            if (phone) {
+                document.getElementById('modal-title').textContent = phone.title;
+                document.getElementById('modal-image').src = phone.image;
+                document.getElementById('modal-price').textContent = phone.price;
+                
+                const specsContainer = document.getElementById('modal-specs');
+                specsContainer.innerHTML = '';
+                phone.specs.forEach(spec => {
+                    const specElement = document.createElement('div');
+                    specElement.className = 'flex items-center';
+                    specElement.innerHTML = `
+                        <svg class="w-4 h-4 ml-2 text-green-400" fill="currentColor" viewBox="0 0 20 20">
+                            <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                        </svg>
+                        ${spec}
+                    `;
+                    specsContainer.appendChild(specElement);
+                });
+                
+                document.getElementById('phone-modal').classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closePhoneModal() {
+            document.getElementById('phone-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
